@@ -2,3 +2,6 @@
 .idea
 lib
 **/__pycache__/
+# your own instagram data: followers, mutuals, profile pictures and everything created from them
+data/*
+.DS_Store

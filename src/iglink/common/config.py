@@ -11,6 +11,8 @@ class Config:
     followers_file_name: str
     mutuals_file_name: str
     output_file_name: str
+    stats_file_name: str
+    plots_dir: Path
 
     request_delay_seconds: int
     request_delay_min_deviation: int
@@ -25,6 +27,7 @@ class Config:
     graph_colors: list[str]
     graph_community_seed: int
     graph_community_resolution: int
+    graph_community_labels: dict[int, str]
     graph_initial_position_seed: int
 
 
@@ -41,6 +44,8 @@ class ConfigLoader(object):
             followers_file_name=data['data']['followers-file-name'],
             mutuals_file_name=data['data']['mutuals-file-name'],
             output_file_name=data['data']['output-file-name'],
+            stats_file_name=data['data']['stats-file-name'],
+            plots_dir=Path(data['data']['plots-dir']),
 
             request_delay_seconds=data['request']['delay-seconds'],
             request_delay_min_deviation=data['request']['delay-deviation-min-seconds'],
@@ -56,6 +61,10 @@ class ConfigLoader(object):
 
             graph_community_seed=data['graph']['community']['seed'],
             graph_community_resolution=data['graph']['community']['resolution'],
+            graph_community_labels={
+                int(community_id): str(label)
+                for community_id, label in (data['graph']['community']['labels'] or {}).items()
+            },
 
             graph_initial_position_seed=data['graph']['initial-position-seed'],
         )

@@ -34,6 +34,11 @@ Steps:
 - `python -m src.iglink.main download_mutuals`
   - if an error occurs, run again, it will pick up from the last checkpoint
 - `python -m src.iglink.main create_graph`
+- `python -m src.iglink.main create_stats` (optional)
+  - prints statistics about your followers and their communities and stores them in `data/stats.json`
+- `python -m src.iglink.main create_plots` (optional)
+  - stores three plots in `data/plots/`: how many mutuals people have, who has the most mutuals and how big the communities are
+  - you can name the communities in `config.yaml` under `graph -> community -> labels`, i.e. `{0: 'School', 1: 'Work'}`. The names are used in the statistics and plots
 
 Now you can open the resulting .html file in the data folder.
 

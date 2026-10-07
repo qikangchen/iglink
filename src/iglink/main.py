@@ -2,6 +2,7 @@ import argparse
 
 from iglink.common.config import ConfigLoader, DataStore
 from iglink.common.follower_reader import FollowersReader
+from iglink.common.graph_loader import GraphLoader
 from iglink.common.header_extractor import HeaderExtractor
 from iglink.common.http_client import HttpClient
 from iglink.common.request_delayer import RequestDelayer
@@ -11,6 +12,8 @@ from iglink.downloader.follower_downloader import FollowerDownloader
 from iglink.downloader.mutual_downloader import MutualDownloader
 from iglink.downloader.profile_pic_downloader import ProfilePicDownloader
 from iglink.graph_creator import GraphCreator
+from iglink.plot_creator import PlotCreator
+from iglink.stats_creator import StatsCreator
 
 
 class Main:
@@ -53,7 +56,10 @@ class Main:
             pagination_downloader
         )
 
+        graph_loader = GraphLoader()
         self.graph_creator = GraphCreator()
+        self.stats_creator = StatsCreator(graph_loader)
+        self.plot_creator = PlotCreator(graph_loader)
 
     def download_followers(self):
         self.follower_downloader.download_followers(self.config.data_dir / self.config.followers_file_name)
@@ -85,6 +91,29 @@ class Main:
             self.config.graph_exclude_followers,
         )
 
+    def create_stats(self):
+        self.stats_creator.create_stats(
+            self.config.data_dir / self.config.followers_file_name,
+            self.config.data_dir / self.config.mutuals_file_name,
+            self.config.data_dir / self.config.stats_file_name,
+            self.config.graph_colors,
+            self.config.graph_community_seed,
+            self.config.graph_community_resolution,
+            self.config.graph_exclude_followers,
+            self.config.graph_community_labels,
+        )
+
+    def create_plots(self):
+        self.plot_creator.create_plots(
+            self.config.data_dir / self.config.followers_file_name,
+            self.config.data_dir / self.config.mutuals_file_name,
+            self.config.data_dir / self.config.plots_dir,
+            self.config.graph_colors,
+            self.config.graph_community_seed,
+            self.config.graph_community_resolution,
+            self.config.graph_exclude_followers,
+            self.config.graph_community_labels,
+        )
 
 
 if __name__ == '__main__':
@@ -100,6 +129,8 @@ if __name__ == '__main__':
     download_profile_pics = subparsers.add_parser('download_profile_pics')
     download_mutuals = subparsers.add_parser('download_mutuals')
     create_graph = subparsers.add_parser('create_graph')
+    create_stats = subparsers.add_parser('create_stats')
+    create_plots = subparsers.add_parser('create_plots')
 
     args = parser.parse_args()
     if args.command == 'download_followers':
@@ -110,3 +141,7 @@ if __name__ == '__main__':
         program.download_mutuals()
     elif args.command == 'create_graph':
         program.create_graph()
+    elif args.command == 'create_stats':
+        program.create_stats()
+    elif args.command == 'create_plots':
+        program.create_plots()

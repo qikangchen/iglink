@@ -5,6 +5,8 @@ data:
   followers-file-name: followers.jsonl # Inside the data folder where followers are stored.
   mutuals-file-name: mutuals.jsonl # Inside the data folder where mutuals are stored.
   output-file-name: output.html # Inside the data folder where the output is stored.
+  stats-file-name: stats.json # Inside the data folder where the statistics are stored.
+  plots-dir: plots # Inside the data folder where the plots are stored
 
 request:
   delay-seconds: 40 # Delay after each request to the instagram server
@@ -33,4 +35,5 @@ graph:
   community:
     seed: 42 # community seed. change to get different communities classifications
     resolution: 1.0 # louvain community detection resolution. If resolution is less than 1, the algorithm favors larger communities. Greater than 1 favors smaller communities
+    labels: {} # name communities by their number (0 is the biggest) i.e. {0: 'School', 1: 'Work'}. Used in the statistics and plots
   initial-position-seed: 42 # initial position of the nodes in the graph seed
